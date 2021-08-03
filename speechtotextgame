@@ -1,0 +1,38 @@
+import pyttsx3
+from tkinter import *
+from random import random
+root = Tk()
+root.geometry('500x500')
+
+def say_word():
+    global engine
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[2].id) #changing index changes voices but ony 0 and 1 are working here
+    engine.say('hola mundo')
+    engine.runAndWait()
+
+engine_words = ('hola mundo')
+
+def entry_answer():
+   if engine_words == Entry_box.get():
+        answer_label.config(text="¡Correcto!", fg = "white", bg = "red")
+   else:
+        answer_label.config(text="¡Incorrecto!")
+
+
+Entry_box = Entry(root)
+Entry_box.place(x=800, y=30)
+
+Click_button = Button(root, text='haz clic para escuchar', command=say_word)
+Click_button.place(x=50, y=20)
+
+answer_label= Label(root, text='', font=("Helvetica, 18"))
+answer_label.pack(pady=20)
+
+answer_button = Button(root, text="entrar", command=entry_answer, bg="orange")
+answer_button.place(x=80, y=30)
+
+root.mainloop()
+
+
