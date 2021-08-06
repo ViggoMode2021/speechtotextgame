@@ -1,9 +1,11 @@
 import pyttsx3
 from tkinter import *
 import random
+from PIL import Image, ImageTk
 root = Tk()
 root.geometry('500x500')
 root.config(bg='black')
+from pygame import mixer
 
 def say_word():
     global engine
@@ -20,15 +22,32 @@ def say_word():
 global score
 score = 0
 
+def announcement_update():
+    if score == 2:
+        announcement_label.config(text='Muy bien', font=('helvetica', 20), bg='pink', fg='white')
+    if score == 3:
+        announcement_label.config(text='Wow estudias mucho', font=('helvetica', 20), bg='pink', fg='white')
+
 def entry_answer():
    global score
    if word == Entry_box.get():
         answer_label.config(text="¡Correcto!", fg = "white", bg = "green")
         score += 1
         score_label.config(text="Tus puntos son: " + str(score))
+        mixer.init()
+        mixer.music.load("correct.mp3")
+        mixer.music.set_volume(0.7)
+        mixer.music.play()
+        announcement_update()
+
    else:
         answer_label.config(text="¡Incorrecto!", fg='black', bg='red')
         score_label.config(text="Tus puntos son: " + str(score))
+        mixer.init()
+        mixer.music.load("incorrect.mp3")
+        mixer.music.set_volume(0.7)
+        mixer.music.play()
+
 
 Entry_box = Entry(root)
 Entry_box.place(x=340, y=160, width=80, height=30)
@@ -44,5 +63,13 @@ answer_button.place(x=180, y=130)
 
 score_label = Label(root, text="Tus puntos son: " + str(score), font=('cambria', 18), bg='blue', fg='white')
 score_label.place(x=200, y=300)
+
+announcement_label = Label(root, text= '...', font=('cambria, 20'))
+announcement_label.place(x=350, y=200)
+
+blanca_photo = PhotoImage(file="blanca.png")
+
+photo_label = Label(root, image=blanca_photo)
+photo_label.place(x=300, y=400)
 
 root.mainloop()
