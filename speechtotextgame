@@ -3,6 +3,7 @@ from tkinter import *
 import random
 root = Tk()
 root.geometry('500x500')
+root.config(bg='black')
 
 def say_word():
     global engine
@@ -10,32 +11,38 @@ def say_word():
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[2].id)
     global engine_words
-    engine_words = {'hola mundo', 'lunes', 'martes'}
+    engine_words = {'buenos días', 'buenas tardes', 'buenas noches', 'hola', 'adiós', '¿cómo estás?', '¿cómo te llamas?'}
     global word
     word = random.choice(tuple(engine_words))
     engine.say(word)
     engine.runAndWait()
 
-#global engine_words
-#engine_words = ['hola mundo', 'lunes', 'martes']
+global score
+score = 0
 
 def entry_answer():
+   global score
    if word == Entry_box.get():
-        answer_label.config(text="¡Correcto!", fg = "white", bg = "red")
+        answer_label.config(text="¡Correcto!", fg = "white", bg = "green")
+        score += 1
+        score_label.config(text="Tus puntos son: " + str(score))
    else:
-        answer_label.config(text="¡Incorrecto!")
-
+        answer_label.config(text="¡Incorrecto!", fg='black', bg='red')
+        score_label.config(text="Tus puntos son: " + str(score))
 
 Entry_box = Entry(root)
-Entry_box.place(x=800, y=30)
+Entry_box.place(x=340, y=160, width=80, height=30)
 
-Click_button = Button(root, text='haz clic para escuchar', command=say_word)
+Click_button = Button(root, text='Haz Clic Para Escuchar', font=('calibri', 30), command=say_word)
 Click_button.place(x=50, y=20)
 
-answer_label= Label(root, text='', font=("Helvetica, 18"))
+answer_label = Label(root, text='', font=("Helvetica, 18"))
 answer_label.pack(pady=20)
 
-answer_button = Button(root, text="entrar", command=entry_answer, bg="orange")
-answer_button.place(x=80, y=30)
+answer_button = Button(root, text="entrar", command=entry_answer, bg="orange", font=('calibri', 30))
+answer_button.place(x=180, y=130)
+
+score_label = Label(root, text="Tus puntos son: " + str(score), font=('cambria', 18), bg='blue', fg='white')
+score_label.place(x=200, y=300)
 
 root.mainloop()
